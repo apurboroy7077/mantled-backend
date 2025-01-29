@@ -40,9 +40,13 @@ export const checkMyPassword = (
       } else {
         reject('Password Is Incorrect');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      reject(error);
+      if (error.message) {
+        reject(error.message);
+      } else {
+        reject(error);
+      }
     }
   });
 };

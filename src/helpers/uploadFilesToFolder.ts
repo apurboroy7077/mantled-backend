@@ -2,7 +2,15 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 
-export const saveFileToFolder = (userImage: any, directoryName: string) => {
+type saveFileToFolderType = (
+  userImage: any,
+  directoryName: string
+) => Promise<string>;
+
+export const saveFileToFolder: saveFileToFolderType = (
+  userImage,
+  directoryName
+) => {
   return new Promise(async (resolve, reject) => {
     try {
       // Ensure directoryName is resolved to an absolute path

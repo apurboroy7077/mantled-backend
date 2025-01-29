@@ -1,6 +1,14 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
-export const giveAuthenticationToken = (email: string, secretKey: string) => {
+type giveAuthenticationTokenType = (
+  email: string,
+  secretKey: string
+) => Promise<string>;
+
+export const giveAuthenticationToken: giveAuthenticationTokenType = (
+  email,
+  secretKey
+) => {
   return new Promise(async (resolve, reject) => {
     try {
       const forSaving = { email: email };

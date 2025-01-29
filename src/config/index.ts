@@ -1,7 +1,10 @@
 import { z } from 'zod';
 import dotenv from 'dotenv';
 import path from 'path';
-import { databaseUrlOfWeatherConsumerReport } from '../data/environmentVariables';
+import {
+  databaseUrlOfMantled,
+  databaseUrlOfWeatherConsumerReport,
+} from '../data/environmentVariables';
 
 // Load environment variables from .env file
 dotenv.config({ path: path.join(__dirname, '../../.env') });
@@ -73,7 +76,7 @@ export default {
   port: envVars.data.PORT,
   socket_port: envVars.data.SOCKET,
   mongoose: {
-    url: databaseUrlOfWeatherConsumerReport,
+    url: databaseUrlOfMantled,
     options: {
       // Optional Mongoose configurations can go here
     },
