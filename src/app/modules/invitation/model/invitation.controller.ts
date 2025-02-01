@@ -16,19 +16,14 @@ const invitationSchema = new mongoose.Schema(
     inviterId: {
       type: String,
     },
-    inviterEmail: {
-      type: String,
-    },
     inviteeId: {
-      type: String,
-    },
-    inviteeEmail: {
       type: String,
     },
     permission: {
       type: String,
       required: true,
       enum: ['view_only', 'can_download'],
+      default: 'view_only',
     },
     status: {
       type: String,

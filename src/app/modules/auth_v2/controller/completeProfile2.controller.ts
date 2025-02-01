@@ -15,14 +15,14 @@ export const completeProfile2Controller = myControllerHandler(
     const { email } = tokenData;
     const { files } = formData;
     console.log('fields are', files);
-    const passportImage = files.passportImage[0];
-    const governmentIdImage = files.governmentIdImage[0];
-    const drivingLicenseImage = files.drivingLicenseImage[0];
+    const passportImage = files.passportImage;
+    const governmentIdImage = files.governmentIdImage;
+    const drivingLicenseImage = files.drivingLicenseImage;
 
     // save image if image exists
-    if (passportImage.size !== 0) {
+    if (passportImage && passportImage.size !== 0) {
       const imageUrl = await saveFileToFolder(
-        passportImage,
+        passportImage[0],
         './public/images/user_images/'
       );
       const refinedImageUrl = refineUrlAr7(imageUrl);
@@ -31,9 +31,9 @@ export const completeProfile2Controller = myControllerHandler(
         { passportImageUrl: refinedImageUrl }
       );
     }
-    if (governmentIdImage.size !== 0) {
+    if (governmentIdImage && governmentIdImage.size !== 0) {
       const imageUrl = await saveFileToFolder(
-        governmentIdImage,
+        governmentIdImage[0],
         './public/images/user_images/'
       );
       const refinedImageUrl = refineUrlAr7(imageUrl);
@@ -42,9 +42,9 @@ export const completeProfile2Controller = myControllerHandler(
         { idCardImageUrl: refinedImageUrl }
       );
     }
-    if (drivingLicenseImage.size !== 0) {
+    if (drivingLicenseImage && drivingLicenseImage.size !== 0) {
       const imageUrl = await saveFileToFolder(
-        drivingLicenseImage,
+        drivingLicenseImage[0],
         './public/images/user_images/'
       );
       const refinedImageUrl = refineUrlAr7(imageUrl);

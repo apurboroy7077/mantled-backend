@@ -3,7 +3,7 @@ import { ar7id } from '../../../../helpers/ar7Id';
 
 const notificationSchema = new mongoose.Schema({
   id: { type: 'String', required: true, unique: true, default: () => ar7id() },
-  userEmail: {
+  userId: {
     type: String,
     required: true,
   },

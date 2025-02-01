@@ -15,6 +15,9 @@ import { notificationRouterV2 } from '../app/modules/notifications_v2/route/noti
 import { collaborationRouter } from '../app/modules/collaboration/route/collaborator.route';
 import { homeRouter } from '../app/modules/home/route/home.route';
 import { invitationRouter } from '../app/modules/invitation/route/invitation.route';
+import { vaultRouter } from '../app/modules/vault/route/vault.route';
+import { userRouterV2 } from '../app/modules/user_v2/route/userV2.route';
+import { generalInfoRouter } from '../app/modules/general_info/route/generalInfo.model';
 
 const router = express.Router();
 
@@ -57,6 +60,9 @@ const apiRoutes = [
   { path: '/collaboration', route: collaborationRouter },
   { path: '/home', route: homeRouter },
   { path: '/invite', route: invitationRouter },
+  { path: '/vault', route: vaultRouter },
+  { path: '/user/v2', route: userRouterV2 },
+  { path: '/general-info', route: generalInfoRouter },
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));

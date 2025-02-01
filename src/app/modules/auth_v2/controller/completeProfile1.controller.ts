@@ -17,7 +17,7 @@ export const completeProfile1Controller = myControllerHandler(
     const occupation = fields.occupation[0];
     const maritalStatus = fields.maritalStatus[0];
     const { email } = tokenData;
-    const profileImage = files.profileImage[0];
+    const profileImage = files.profileImage;
 
     // update userdata
     await userModelOfMantled.findOneAndUpdate(
@@ -30,9 +30,9 @@ export const completeProfile1Controller = myControllerHandler(
     );
 
     // save image if image exists
-    if (profileImage.size !== 0) {
+    if (profileImage && profileImage.size !== 0) {
       const imageUrl = await saveFileToFolder(
-        profileImage,
+        profileImage[0],
         './public/images/user_images/'
       );
       const refinedImageUrl = refineUrlAr7(imageUrl);

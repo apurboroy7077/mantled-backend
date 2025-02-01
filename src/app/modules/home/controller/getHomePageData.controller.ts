@@ -59,10 +59,12 @@ export const getHomepageDataController = myControllerHandler(
       dataForClient.percentageOfAssignedAssets = percentageOfAssignedAssets;
     }
 
-    sendResponse(res, {
-      code: StatusCodes.OK,
-      message: 'Homepage data Given Successfully',
-      data: dataForClient,
-    });
+    const myResponse = {
+      message: 'Data Fetched Successfully',
+      success: true,
+      ...dataForClient,
+    };
+
+    res.status(StatusCodes.OK).json(myResponse);
   }
 );

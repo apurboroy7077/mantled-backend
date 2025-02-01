@@ -16,7 +16,7 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   }
 
   let code = 500;
-  let message = 'Something went wrong';
+  let message = error.message || 'Something went wrong';
   let errorMessages: IErrorMessage[] = [];
 
   // Handle Zod Validation Error
@@ -50,6 +50,11 @@ const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   else if (error instanceof Error) {
     message = error.message || 'Internal Server Error';
     errorMessages = error.message ? [{ path: '', message: error.message }] : [];
+  }
+  // Handle Unknown Errors
+  else {
+    message = typeof error === 'string' ? error : JSON.stringify(error);
+    errorMessages = [{ path: '', message }];
   }
 
   // Send response

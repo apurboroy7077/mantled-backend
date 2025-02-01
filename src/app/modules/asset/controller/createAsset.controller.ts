@@ -103,11 +103,11 @@ export const createAssetController = myControllerHandler(async (req, res) => {
     });
     if (collaboratorData) {
       if (collaboratorData.role === 'collaborator') {
-        await sendCollaboratorInvitationEmail(
-          collaboratorEmail,
-          collaboratorData.fullName,
-          assetName
-        );
+        await invitationModelOfMantled.create({
+          inviterId: userData.id,
+          inviteeId: collaboratorData.id,
+          assetId: assetDateAfterSaved?.id,
+        });
       } else {
         throw new Error(
           `The invited person is a ${collaboratorData.role}, not collaborator`
@@ -119,11 +119,6 @@ export const createAssetController = myControllerHandler(async (req, res) => {
         assetName
       );
     }
-    await invitationModelOfMantled.create({
-      inviterEmail: email,
-      inviteeEmail: collaboratorEmail,
-      assetId: assetDateAfterSaved?.id,
-    });
   }
 
   sendResponse(res, {

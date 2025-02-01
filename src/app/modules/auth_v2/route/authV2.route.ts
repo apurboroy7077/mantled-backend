@@ -10,6 +10,9 @@ import { forgotPasswordController } from '../controller/forgotPassword.controlle
 import { verifyOtpOfForgotPasswordController } from '../controller/verifyOtpOfForgotPassword.controller';
 import { changePasswordController } from '../controller/changePassword.controller';
 import { vaultSignInController } from '../controller/vaultSignIn.controller';
+import { updateProfileController } from '../controller/updateProfile.controller';
+import { updateVaultPasswordController } from '../controller/updateVaultPassword.controller';
+import { changePasswordInSettingsController } from '../controller/changePasswordInSettings.controller';
 
 const authV2Router = express.Router();
 
@@ -25,6 +28,12 @@ authV2Router.post(
   verifyOtpOfForgotPasswordController
 );
 authV2Router.post('/change-password', changePasswordController);
+authV2Router.post(
+  '/change-password-in-settings',
+  changePasswordInSettingsController
+);
 authV2Router.post('/vault/sign-in', vaultSignInController);
+authV2Router.post('/update-profile', updateProfileController);
+authV2Router.post('/update-vault-password', updateVaultPasswordController);
 
 export { authV2Router };

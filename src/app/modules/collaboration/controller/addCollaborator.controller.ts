@@ -14,8 +14,14 @@ export const addCollaboratorController = myControllerHandler(
     const { assetId, emailOfCollaborator, permission } = req.body;
     const { email } = authData;
     const userData = await userModelOfMantled.findOne({ email });
+    const collaboratorData = await userModelOfMantled.findOne({
+      email: emailOfCollaborator,
+    });
     if (!userData) {
       throw new Error('user does not exists');
+    }
+    if (!collaboratorData) {
+      throw new Error('this collaborator does not have a account here');
     }
     const userId = userData.id;
     const assetData = await assetModel.findOne({ id: assetId });
@@ -29,7 +35,7 @@ export const addCollaboratorController = myControllerHandler(
     await invitationModelOfMantled.create({
       assetId,
       inviterId: userId,
-      inviteeEmail: emailOfCollaborator,
+      inviteeId: collaboratorData.id,
       permission,
     });
 

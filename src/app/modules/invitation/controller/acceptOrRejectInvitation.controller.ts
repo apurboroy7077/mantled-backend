@@ -13,30 +13,27 @@ export const acceptOrRejectInvitationController = myControllerHandler(
     const { email } = authData;
     const { inviteId, action } = req.body;
     const inviteData = await invitationModelOfMantled.findOne({ id: inviteId });
+    const userData = await userModelOfMantled.findOne({ email });
+    console.log(userData);
+    if (!userData) {
+      throw new Error('User with this token does not exists');
+    }
     if (!inviteData) {
       throw new Error('Invalid invitation id');
     }
+
     if (inviteData.status !== 'pending') {
       throw new Error('Action for this invitation already taken');
     }
-    if (email !== inviteData.inviteeEmail) {
+    if (userData.id !== inviteData.inviteeId) {
       throw new Error('The user has no right to take action of this invite');
     }
-    const { assetId, inviteeEmail, permission } = inviteData;
-    const dataOfInvitee = await userModelOfMantled.findOne({
-      email: inviteeEmail,
-    });
-    if (!dataOfInvitee) {
-      throw new Error(
-        'The invitee did not created a account yet to become collaborator'
-      );
-    }
-    const idOfInvitee = await dataOfInvitee.id;
+    const { assetId, permission } = inviteData;
 
     if (action === 'accept') {
       await collaborationModelOfMantled.create({
         assetId: assetId,
-        collaboratorId: idOfInvitee,
+        collaboratorId: inviteData.inviteeId,
         permission: permission,
       });
       await invitationModelOfMantled.findOneAndUpdate(
