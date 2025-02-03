@@ -7,6 +7,7 @@ import { assetModel } from '../../asset/model/asset.model';
 import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 import { collaborationModelOfMantled } from '../../collaboration/model/collaboration.model';
 import { removeDuplicates } from '../../../../helpers/removeDuplicatesFromStringOfArray';
+import { checkIsBanned } from '../../../../helpers_v2/auth/checkIsBanned.helper';
 
 export const getDetailsOfSingleAssetController = myControllerHandler(
   async (req, res) => {
@@ -22,6 +23,7 @@ export const getDetailsOfSingleAssetController = myControllerHandler(
     if (!userData) {
       throw new Error('user does not exists');
     }
+    await checkIsBanned(userData);
     if (!assetData) {
       throw new Error('Asset does not exists');
     }
@@ -68,7 +70,7 @@ export const getDetailsOfSingleAssetController = myControllerHandler(
 
     sendResponse(res, {
       code: StatusCodes.OK,
-      message: 'Review Given Successfully',
+      message: 'Asset Data Fetched Successfully',
       data: {
         assetData,
         collaboratorsAssignedToThisAsset: refinedDataOfCollaborator,

@@ -5,6 +5,7 @@ import { jwtSecretKeyOfVault } from '../../../../data/environmentVariables';
 import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 import { invitationModelOfMantled } from '../../invitation/model/invitation.controller';
 import { removeDuplicates } from '../../../../helpers/removeDuplicatesFromStringOfArray';
+import { checkIsBanned } from '../../../../helpers_v2/auth/checkIsBanned.helper';
 
 export const getDataOfInvitationSentToCollaboratorController =
   myControllerHandler(async (req, res) => {
@@ -18,7 +19,7 @@ export const getDataOfInvitationSentToCollaboratorController =
     if (!userData) {
       throw new Error('User Does not Exists');
     }
-
+    await checkIsBanned(userData);
     const dataOfInvitations = await invitationModelOfMantled.find({
       inviterId: userData.id,
     });
@@ -58,7 +59,7 @@ export const getDataOfInvitationSentToCollaboratorController =
     console.log(refinedDataOfInvitation);
 
     res.status(StatusCodes.OK).json({
-      message: 'Data Given Successfully',
+      message: 'Invitation Data Given Successfully',
       success: true,
       dataOfInvitations: refinedDataOfInvitation,
     });

@@ -5,51 +5,36 @@ import { userDataModelOfWeatherConsumerReport } from '../../user/userModelOfWeat
 import { reviewDataModelOfWeatherConsumerReport } from '../../review/model/review.model';
 import { checkIfUserRequestingAdmin } from '../../../../helpers/checkIfRequestedUserAdmin';
 import { jwtSecretKey } from '../../../../data/environmentVariables';
+import { getAdminRequestAndGiveTotalNumberOfUser } from '../../../../helpers_v2/admin-requests/getAdminRequestAndGiveTotalNumberOfUser.helper';
+import { getAdminRequestAndGiveTotalAmountOfIncome } from '../../../../helpers_v2/admin-requests/getAdminRequestAndGiveTotalAmountOfIncome.helper';
+import { getAdminRequestAndGiveDataOfIncomesOfDifferentMonths } from '../../../../helpers_v2/admin-requests/getAdminRequestAndGiveDataOfIncomesOfDifferentMonths.helper';
+import { getAdminRequestAndGiveTotalUserOfDifferentMonths } from '../../../../helpers_v2/admin-requests/getAdminRequestAndGiveTotalUserOfDifferentMonths.helper';
+import { getAdminRequestAndGiveRecentUsers } from '../../../../helpers_v2/admin-requests/getAdminRequestAndGiveRecentUsers.helper';
 
 export const getAdminDashboardDataController = myControllerHandler(
   async (req, res) => {
-    await checkIfUserRequestingAdmin(req, jwtSecretKey);
-    const totalUser =
-      await userDataModelOfWeatherConsumerReport.countDocuments();
-    const totalReviews =
-      await reviewDataModelOfWeatherConsumerReport.countDocuments();
-    const numberOfReviewsInDifferentMonths = [
-      { month: 'January', reviews: 75 },
-      { month: 'February', reviews: 80 },
-      { month: 'March', reviews: 90 },
-    ];
+    const totalNumberOfUser = await getAdminRequestAndGiveTotalNumberOfUser(
+      req
+    );
+    const totalAmountOfEarnings =
+      await getAdminRequestAndGiveTotalAmountOfIncome(req);
+    const totalAmountOfEarningInDifferentTime =
+      await getAdminRequestAndGiveDataOfIncomesOfDifferentMonths(req);
 
-    const userActivityDetailsInDifferentMonths = [
-      { month: 'January', active_users: 900, inactive_users: 300 },
-      { month: 'February', active_users: 850, inactive_users: 200 },
-    ];
-    const topRatedProductsData = [
-      {
-        rank: 1,
-        product_name: 'John',
-        average_rating: 4.5,
-        total_reviews: 300,
-      },
-      {
-        rank: 2,
-        product_name: 'Jane',
-        average_rating: 4.5,
-        total_reviews: 300,
-      },
-    ];
+    const usersDataInDifferentTimes =
+      await getAdminRequestAndGiveTotalUserOfDifferentMonths(req);
 
-    const dataForClient = {
-      totalUser,
-      totalReviews,
-      numberOfReviewsInDifferentMonths,
-      topRatedProductsData,
-      userActivityDetailsInDifferentMonths,
+    const recentUsers = await getAdminRequestAndGiveRecentUsers(req);
+
+    const myResponse = {
+      message: 'Dashboard Data Fetched Successful',
+      success: true,
+      totalNumberOfUser,
+      totalAmountOfEarnings,
+      totalAmountOfEarningInDifferentTime,
+      usersDataInDifferentTimes,
+      recentUsers,
     };
-
-    sendResponse(res, {
-      code: StatusCodes.OK,
-      message: 'Review Given Successfully',
-      data: dataForClient,
-    });
+    res.status(StatusCodes.OK).json(myResponse);
   }
 );

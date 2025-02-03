@@ -6,6 +6,7 @@ import { jwtSecretKeyOfVault } from '../../../../data/environmentVariables';
 import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 import { assetModel } from '../../asset/model/asset.model';
 import { collaborationModelOfMantled } from '../../collaboration/model/collaboration.model';
+import { checkIsBanned } from '../../../../helpers_v2/auth/checkIsBanned.helper';
 
 export const getSingleCollaboratorDataAndAssetsAssignedToHimController =
   myControllerHandler(async (req, res) => {
@@ -23,6 +24,8 @@ export const getSingleCollaboratorDataAndAssetsAssignedToHimController =
     if (!userData) {
       throw new Error('User does not exist with this token');
     }
+
+    await checkIsBanned(userData);
     if (!collaboratorData) {
       throw new Error('Collaborator does not exist with this id');
     }
@@ -67,7 +70,7 @@ export const getSingleCollaboratorDataAndAssetsAssignedToHimController =
 
     sendResponse(res, {
       code: StatusCodes.OK,
-      message: 'Review Given Successfully',
+      message: 'Data Fetched Successfully',
       data: dataForclient,
     });
   });

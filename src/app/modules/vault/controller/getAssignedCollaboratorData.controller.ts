@@ -7,6 +7,7 @@ import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model
 import { assetModel } from '../../asset/model/asset.model';
 import { collaborationModelOfMantled } from '../../collaboration/model/collaboration.model';
 import { removeDuplicates } from '../../../../helpers/removeDuplicatesFromStringOfArray';
+import { checkIsBanned } from '../../../../helpers_v2/auth/checkIsBanned.helper';
 
 export const getAssignedCollaboratorDataController = myControllerHandler(
   async (req, res) => {
@@ -21,6 +22,7 @@ export const getAssignedCollaboratorDataController = myControllerHandler(
     if (!userData) {
       throw new Error('User does not exists');
     }
+    await checkIsBanned(userData);
     const assetsOfUser = await assetModel.find({ ownerId: userData.id });
     const arrayOfAssetId: any = [];
     for (let i = 0; i < assetsOfUser.length; i++) {
@@ -53,7 +55,7 @@ export const getAssignedCollaboratorDataController = myControllerHandler(
 
     sendResponse(res, {
       code: StatusCodes.OK,
-      message: 'Review Given Successfully',
+      message: 'Colaborator Data Fetched Successful',
       data: {
         dataOfCollaborators: refinedDataOfCollaborator,
       },

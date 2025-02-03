@@ -4,6 +4,7 @@ import { collaborationModelOfMantled } from '../../app/modules/collaboration/mod
 import { jwtSecretKeyOfVault } from '../../data/environmentVariables';
 import { formatDateAR7 } from '../../helpers/formatTimeAR7';
 import { getAndParseTokenFromHeader2 } from '../../helpers/getAndParseBearerTokenFromHeader';
+import { checkIsBanned } from '../auth/checkIsBanned.helper';
 
 export const getRequestAndGiveDataOfAssignedAssets = (req: any) => {
   return new Promise(async (resolve, reject) => {
@@ -18,6 +19,7 @@ export const getRequestAndGiveDataOfAssignedAssets = (req: any) => {
       if (!userData) {
         throw new Error('User does not exists');
       }
+      await checkIsBanned(userData);
 
       const collaborationData = await collaborationModelOfMantled.find({
         collaboratorId: userData.id,

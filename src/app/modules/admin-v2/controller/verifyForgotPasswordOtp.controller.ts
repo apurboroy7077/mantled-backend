@@ -22,11 +22,11 @@ export const verifyForgotPasswordOtpController = myControllerHandler(
       adminChangingPasswordJwtSecretKey
     )) as any;
 
-    sendResponse2(res, {
-      code: StatusCodes.OK,
-      message: 'Otp Verified Successful',
-      data: [userData],
-      token: token,
-    });
+    const myResponse = {
+      message: 'Token Verified Successfully',
+      success: true,
+      changePasswordToken: token,
+    };
+    res.status(StatusCodes.OK).json(myResponse);
   }
 );

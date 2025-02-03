@@ -2,6 +2,7 @@ import { assetModel } from '../app/modules/asset/model/asset.model';
 import { userModelOfMantled } from '../app/modules/auth_v2/model/userModelOfMantled.model';
 import { collaborationModelOfMantled } from '../app/modules/collaboration/model/collaboration.model';
 import { jwtSecretKeyOfVault } from '../data/environmentVariables';
+import { checkIsBanned } from '../helpers_v2/auth/checkIsBanned.helper';
 import { formatDateAR7 } from './formatTimeAR7';
 import { getAndParseTokenFromHeader2 } from './getAndParseBearerTokenFromHeader';
 import { getOldestTime } from './giveOldestTime';
@@ -19,6 +20,7 @@ export const getRequestAndGiveDataOfClients = (req: any) => {
       if (!userData) {
         throw new Error('user does not exists');
       }
+      await checkIsBanned(userData);
       // data of collaboration
       const collaborationDataOfUser = await collaborationModelOfMantled.find({
         collaboratorId: userData.id,

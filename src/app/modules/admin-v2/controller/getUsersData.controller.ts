@@ -4,6 +4,7 @@ import { myControllerHandler } from '../../../../utils/controller/myControllerHa
 import { userDataModelOfWeatherConsumerReport } from '../../user/userModelOfWeatherConsumerReport.model';
 import { checkIfUserRequestingAdmin } from '../../../../helpers/checkIfRequestedUserAdmin';
 import { jwtSecretKey } from '../../../../data/environmentVariables';
+import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 
 export const getUserDataController = myControllerHandler(async (req, res) => {
   await checkIfUserRequestingAdmin(req, jwtSecretKey);
@@ -16,8 +17,8 @@ export const getUserDataController = myControllerHandler(async (req, res) => {
       'Invalid range: "to" should be greater than or equal to "from".'
     );
   }
-  const usersData = await userDataModelOfWeatherConsumerReport
-    .find()
+  const usersData = await userModelOfMantled
+    .find({ role: 'user' })
     .skip(startIndex)
     .limit(limit);
 

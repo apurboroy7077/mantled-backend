@@ -8,7 +8,7 @@ export const getDataOfPendingAssetsOfCollaboratorController =
       await getRequestAndGiveDataOfPendingAssetsOfCollaborators(req);
 
     const myResponse = {
-      message: 'Review Given Successfully',
+      message: 'Pending Asset Data Fetched Successfull',
       success: true,
       dataOfPendingAssets,
     };

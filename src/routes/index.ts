@@ -18,6 +18,8 @@ import { invitationRouter } from '../app/modules/invitation/route/invitation.rou
 import { vaultRouter } from '../app/modules/vault/route/vault.route';
 import { userRouterV2 } from '../app/modules/user_v2/route/userV2.route';
 import { generalInfoRouter } from '../app/modules/general_info/route/generalInfo.model';
+import { categoriesRouter } from '../app/modules/categories/routes/categories.route';
+import { subscriptionPackagesRouter } from '../app/modules/subscription_packages/route/subscriptionPackages.route';
 
 const router = express.Router();
 
@@ -63,6 +65,8 @@ const apiRoutes = [
   { path: '/vault', route: vaultRouter },
   { path: '/user/v2', route: userRouterV2 },
   { path: '/general-info', route: generalInfoRouter },
+  { path: '/categories', route: categoriesRouter },
+  { path: '/packages', route: subscriptionPackagesRouter },
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));

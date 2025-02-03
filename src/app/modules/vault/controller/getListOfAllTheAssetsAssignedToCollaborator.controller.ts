@@ -7,7 +7,7 @@ export const getListOfAllTheAssetsAssignedToCollaboratorController =
     const refinedAssetsData = await getRequestAndGiveDataOfAssignedAssets(req);
 
     const myResponse = {
-      message: 'Review Given Successfully',
+      message: 'Asset Data Fetched Successfully',
       success: true,
       assignedAssets: refinedAssetsData,
     };

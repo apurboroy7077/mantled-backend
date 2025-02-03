@@ -5,6 +5,7 @@ import { invitationModelOfMantled } from '../../app/modules/invitation/model/inv
 import { jwtSecretKeyOfVault } from '../../data/environmentVariables';
 import { formatDateAR7 } from '../../helpers/formatTimeAR7';
 import { getAndParseTokenFromHeader2 } from '../../helpers/getAndParseBearerTokenFromHeader';
+import { checkIsBanned } from '../auth/checkIsBanned.helper';
 
 export const getRequestAndGiveDataOfPendingAssetsOfCollaborators = (
   req: any
@@ -21,7 +22,7 @@ export const getRequestAndGiveDataOfPendingAssetsOfCollaborators = (
       if (!userData) {
         throw new Error('User does not exists');
       }
-
+      await checkIsBanned(userData);
       const invitationData = await invitationModelOfMantled.find({
         inviteeId: userData.id,
         status: 'pending',

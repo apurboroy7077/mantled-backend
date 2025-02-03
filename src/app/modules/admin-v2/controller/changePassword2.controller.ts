@@ -6,11 +6,12 @@ import {
   checkMyPassword,
   hashMyPassword,
 } from '../../../../helpers/passwordHashing';
+import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 
 export const changePasswordController2 = myControllerHandler(
   async (req, res) => {
     const { email, newPassword, oldPassword } = req.body;
-    const userData = await userDataModelOfWeatherConsumerReport.findOne({
+    const userData = await userModelOfMantled.findOne({
       email,
     });
     if (!userData) {
@@ -21,8 +22,8 @@ export const changePasswordController2 = myControllerHandler(
     await checkMyPassword(oldPassword, passwordHash);
     //change password
     const newPasswordHash = await hashMyPassword(newPassword);
-    await userDataModelOfWeatherConsumerReport.findOneAndUpdate(
-      { email },
+    await userModelOfMantled.findOneAndUpdate(
+      { id: userData.id },
       {
         passwordHash: newPasswordHash,
       }

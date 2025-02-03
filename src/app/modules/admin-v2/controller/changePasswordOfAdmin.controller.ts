@@ -5,6 +5,7 @@ import { parseJwtToken } from '../../../../helpers/jwtAR7';
 import { adminChangingPasswordJwtSecretKey } from '../../../../data/environmentVariables';
 import { hashMyPassword } from '../../../../helpers/passwordHashing';
 import { userDataModelOfWeatherConsumerReport } from '../../user/userModelOfWeatherConsumerReport.model';
+import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 
 export const changeAdminPasswordController = myControllerHandler(
   async (req, res) => {
@@ -16,7 +17,7 @@ export const changeAdminPasswordController = myControllerHandler(
     );
     const newHashedPassword = await hashMyPassword(newPassword);
 
-    await userDataModelOfWeatherConsumerReport.findOneAndUpdate(
+    await userModelOfMantled.findOneAndUpdate(
       { email },
       { passwordHash: newHashedPassword }
     );

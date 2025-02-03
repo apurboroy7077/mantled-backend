@@ -5,6 +5,7 @@ import { getAndParseTokenFromHeader2 } from '../../../../helpers/getAndParseBear
 import { jwtSecretKeyOfVault } from '../../../../data/environmentVariables';
 import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 import { assetModel } from '../../asset/model/asset.model';
+import { checkIsBanned } from '../../../../helpers_v2/auth/checkIsBanned.helper';
 
 export const getDataOfAssetController = myControllerHandler(
   async (req, res) => {
@@ -20,6 +21,7 @@ export const getDataOfAssetController = myControllerHandler(
     if (!userData) {
       throw new Error('user does not exists');
     }
+    await checkIsBanned(userData);
     let dataForClient: any;
 
     if (assetType) {
@@ -35,7 +37,7 @@ export const getDataOfAssetController = myControllerHandler(
 
     sendResponse(res, {
       code: StatusCodes.OK,
-      message: 'Review Given Successfully',
+      message: 'Asset Data Fethed Successfull',
       data: {
         assetsData: dataForClient,
       },

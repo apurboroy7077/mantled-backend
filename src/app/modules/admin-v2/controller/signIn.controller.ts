@@ -5,10 +5,11 @@ import { userDataModelOfWeatherConsumerReport } from '../../user/userModelOfWeat
 import { checkMyPassword } from '../../../../helpers/passwordHashing';
 import { giveAuthenticationToken } from '../../../../helpers/jwtAR7';
 import { jwtSecretKey } from '../../../../data/environmentVariables';
+import { userModelOfMantled } from '../../auth_v2/model/userModelOfMantled.model';
 
 export const adminSignInController = myControllerHandler(async (req, res) => {
   const { email, password } = req.body;
-  const userData = await userDataModelOfWeatherConsumerReport.findOne({
+  const userData = await userModelOfMantled.findOne({
     email,
   });
   if (!userData) {
@@ -27,10 +28,10 @@ export const adminSignInController = myControllerHandler(async (req, res) => {
   const authToken = await giveAuthenticationToken(email, jwtSecretKey);
   const bearerToken = `Bearer ${authToken}`;
 
-  sendResponse2(res, {
-    code: StatusCodes.OK,
-    message: 'Admin Login Successfull',
-    data: [userData],
+  const myResponse = {
+    message: 'Admin Sign In Successfull',
+    success: true,
     token: bearerToken,
-  });
+  };
+  res.status(StatusCodes.OK).json(myResponse);
 });
