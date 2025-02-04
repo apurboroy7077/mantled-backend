@@ -22,6 +22,10 @@ import { updateCategoryController } from '../controller/updateCategories.control
 import { getCollaboratorsDataController } from '../controller/getCollaboratorsData.controller';
 import { addSubscriptionPackagesController } from '../controller/addSubscriptionPackages.controller';
 import { editSubscriptionPackagesController } from '../controller/editSubscriptionPackages.controller';
+import { getTransactionDataController } from '../controller/getTransactionData.controller';
+import { getSingleTransactionDataController } from '../controller/getSingleTransactionData.controller';
+import { updateProfileController } from '../../auth_v2/controller/updateProfile.controller';
+import { updateGeneralInfoController } from '../controller/updateGeneralInfo.controller';
 
 const adminRouterV2 = express.Router();
 
@@ -41,6 +45,7 @@ adminRouterV2.post(
 );
 adminRouterV2.post('/change-admin-password', changeAdminPasswordController);
 adminRouterV2.post('/change-admin-password-2', changePasswordController2);
+adminRouterV2.post('/update-profile', updateProfileController);
 adminRouterV2.post('/remove-product', removeProductController);
 adminRouterV2.get('/total-number-of-user', getTotalNumberOfUserController);
 adminRouterV2.get(
@@ -61,6 +66,8 @@ adminRouterV2.get('/single-user', getSingleUserDataController);
 adminRouterV2.post('/categories/add', addCategoryController);
 adminRouterV2.post('/categories/update', updateCategoryController);
 adminRouterV2.post('/subscription/add', addSubscriptionPackagesController);
-adminRouterV2.post('/categories/update', editSubscriptionPackagesController);
-
+adminRouterV2.post('/subscription/edit', editSubscriptionPackagesController);
+adminRouterV2.get('/payment', getTransactionDataController);
+adminRouterV2.get('/payment/:id', getSingleTransactionDataController);
+adminRouterV2.post('/general-info/update/:name', updateGeneralInfoController);
 export { adminRouterV2 };

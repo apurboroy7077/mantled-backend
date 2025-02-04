@@ -1,12 +1,15 @@
 import { StatusCodes } from 'http-status-codes';
 import { myControllerHandler } from '../../../../utils/controller/myControllerHandler.utils';
+import { subscriptionPackageModel } from '../model/subscriptionPackages.model';
 
 export const getSubscriptionPackagesController = myControllerHandler(
   async (req, res) => {
+    const packagesData = await subscriptionPackageModel.find();
+
     const myResponse = {
-      message: 'Review Given Successfully',
+      message: 'Subscription Packages Fetched Successfully',
       success: true,
-      data: {},
+      data: packagesData,
     };
     res.status(StatusCodes.OK).json(myResponse);
   }

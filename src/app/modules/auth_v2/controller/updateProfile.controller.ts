@@ -43,6 +43,7 @@ export const updateProfileController = myControllerHandler(async (req, res) => {
   const imageOfPassport = dataFromUser.files.imageOfPassport;
   const imageOfGovernmentId = dataFromUser.files.imageOfGovernmentId;
   const imageOfDrivingLicense = dataFromUser.files.imageOfDrivingLicense;
+  const imageOfProfile = dataFromUser.files.imageOfProfile;
 
   if (Object.keys(updateFields).length > 0) {
     await userModelOfMantled.findOneAndUpdate(
@@ -83,6 +84,18 @@ export const updateProfileController = myControllerHandler(async (req, res) => {
     await userModelOfMantled.findOneAndUpdate(
       { id: userData.id },
       { drivingLicenseImageUrl: refinedImageUrl }
+    );
+  }
+  if (imageOfProfile) {
+    const imageUrl = await saveFileToFolder(
+      imageOfProfile[0],
+      './public/images/users/'
+    );
+    const refinedImageUrl = refineUrlAr7(imageUrl);
+
+    await userModelOfMantled.findOneAndUpdate(
+      { id: userData.id },
+      { profileImageUrl: refinedImageUrl }
     );
   }
 

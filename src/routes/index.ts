@@ -66,7 +66,7 @@ const apiRoutes = [
   { path: '/user/v2', route: userRouterV2 },
   { path: '/general-info', route: generalInfoRouter },
   { path: '/categories', route: categoriesRouter },
-  { path: '/packages', route: subscriptionPackagesRouter },
+  { path: '/subscription-packages', route: subscriptionPackagesRouter },
 ];
 
 apiRoutes.forEach(route => router.use(route.path, route.route));
