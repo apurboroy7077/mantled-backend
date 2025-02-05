@@ -16,7 +16,7 @@ export const createAssetController = myControllerHandler(async (req, res) => {
   const { email } = authData;
   const userData = await userModelOfMantled.findOne({ email });
   if (!userData) {
-    throw new Error('User does not exists');
+    throw new Error('User does not exist');
   }
   const myData = await getDataFromFormOfRequest(req);
   const { fields, files } = myData;
@@ -29,14 +29,22 @@ export const createAssetController = myControllerHandler(async (req, res) => {
   const beneficiaryDateOfBirth = fields.beneficiaryDateOfBirth[0];
   const relationWithBeneficiary = fields.relationWithBeneficiary[0];
 
-  const assetDocumentUrl = await saveAndGiveRefinedUrl(
-    files.assetDocument[0],
-    './public/images/documents/'
-  );
-  const beneficiaryDocumentUrl = await saveAndGiveRefinedUrl(
-    files.beneficiaryDocument[0],
-    './public/images/documents/'
-  );
+  let assetDocumentUrl: any = '';
+  let beneficiaryDocumentUrl: any = '';
+
+  if (files.assetDocument && files.assetDocument[0]) {
+    assetDocumentUrl = await saveAndGiveRefinedUrl(
+      files.assetDocument[0],
+      './public/images/documents/'
+    );
+  }
+
+  if (files.beneficiaryDocument && files.beneficiaryDocument[0]) {
+    beneficiaryDocumentUrl = await saveAndGiveRefinedUrl(
+      files.beneficiaryDocument[0],
+      './public/images/documents/'
+    );
+  }
 
   let assetDateAfterSaved;
 
@@ -110,7 +118,7 @@ export const createAssetController = myControllerHandler(async (req, res) => {
         });
       } else {
         throw new Error(
-          `The invited person is a ${collaboratorData.role}, not collaborator`
+          `The invited person is a ${collaboratorData.role}, not a collaborator`
         );
       }
     } else {
