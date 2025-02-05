@@ -7,10 +7,12 @@ import { Morgan } from './shared/morgen';
 import notFound from './app/middlewares/notFount';
 import path from 'path';
 import morgan from 'morgan';
+import { sendEncryptedFileController } from './app/modules/send_file/controller/sendEncryptedFile.controller';
 
 const app = express();
 
 // morgan
+app.use(sendEncryptedFileController);
 app.use(express.static('./public'));
 app.use(Morgan.successHandler);
 app.use(Morgan.errorHandler);

@@ -2,6 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import sharp from 'sharp';
+import { encryptionSecretKey } from '../data/environmentVariables';
+
+const algorithm = 'aes-256-cbc';
 
 // Define the function type
 type saveFileToFolderType = (
@@ -38,15 +41,29 @@ export const saveFileToFolder: saveFileToFolderType = async (
         fs.mkdirSync(uploadFolder, { recursive: true });
       }
 
+      let fileBuffer;
+
       if (isImage) {
-        // Convert image to WebP before saving
-        await sharp(userImage.filepath)
+        // Convert image to WebP before encryption
+        const imageBuffer = await sharp(userImage.filepath)
           .webp({ quality: 80 }) // Adjust quality as needed
-          .toFile(destPath);
+          .toBuffer();
+        fileBuffer = imageBuffer;
       } else {
-        // Move the file as is for non-image files
-        await fs.promises.rename(userImage.filepath, destPath);
+        fileBuffer = await fs.promises.readFile(userImage.filepath);
       }
+
+      // Encrypt the file
+      const iv = crypto.randomBytes(16);
+      const cipher = crypto.createCipheriv(algorithm, encryptionSecretKey, iv);
+      const encryptedBuffer = Buffer.concat([
+        iv,
+        cipher.update(fileBuffer),
+        cipher.final(),
+      ]);
+
+      // Save the encrypted file
+      await fs.promises.writeFile(destPath, encryptedBuffer);
 
       resolve(destPath);
     } catch (error) {
