@@ -16,9 +16,9 @@ vaultRouter.get(
   '/get-assigned-collaborator-data',
   getAssignedCollaboratorDataController
 );
-vaultRouter.post('/asset', getDataOfAssetController);
-vaultRouter.post('/single-asset-details', getDetailsOfSingleAssetController);
-vaultRouter.post(
+vaultRouter.get('/asset', getDataOfAssetController);
+vaultRouter.get('/single-asset-details', getDetailsOfSingleAssetController);
+vaultRouter.get(
   '/single-collaborator-and-asset-assigned-to-that-collaborator',
   getSingleCollaboratorDataAndAssetsAssignedToHimController
 );

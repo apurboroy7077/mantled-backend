@@ -15,7 +15,7 @@ export const getDataOfAssetController = myControllerHandler(
       'vaulttoken'
     );
     const { email } = vaultTokenData;
-    const { assetType } = req.body;
+    const { assetType } = req.query;
 
     const userData = await userModelOfMantled.findOne({ email });
     if (!userData) {

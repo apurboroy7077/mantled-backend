@@ -16,7 +16,7 @@ export const getDetailsOfSingleAssetController = myControllerHandler(
       jwtSecretKeyOfVault,
       'vaulttoken'
     );
-    const { assetId } = req.body;
+    const { assetId } = req.query;
     const { email } = vaultTokenData;
     const userData = await userModelOfMantled.findOne({ email });
     const assetData = await assetModel.findOne({ id: assetId });

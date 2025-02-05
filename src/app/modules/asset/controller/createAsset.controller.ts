@@ -15,23 +15,41 @@ export const createAssetController = myControllerHandler(async (req, res) => {
   const authData = await getAndParseJwtTokenFromHeader(req, jwtSecretKey);
   const { email } = authData;
   const userData = await userModelOfMantled.findOne({ email });
+
   if (!userData) {
     throw new Error('User does not exist');
   }
+
   const myData = await getDataFromFormOfRequest(req);
   const { fields, files } = myData;
 
-  const assetType = fields.assetType[0].toLowerCase();
-  const collaboratorEmail = fields.collaboratorEmail[0];
-  const assetName = fields.assetName[0];
-  const assetDetails = fields.assetDetails[0];
-  const beneficiaryName = fields.beneficiaryName[0];
-  const beneficiaryDateOfBirth = fields.beneficiaryDateOfBirth[0];
-  const relationWithBeneficiary = fields.relationWithBeneficiary[0];
+  // Ensure ownerId and assetName are provided
+  const ownerId = userData.id;
+  const assetName = fields.assetName ? fields.assetName[0] : null;
+  if (!assetName) {
+    throw new Error('Asset name is required');
+  }
 
-  let assetDocumentUrl: any = '';
-  let beneficiaryDocumentUrl: any = '';
+  // Set optional fields with default values if not present
+  const assetType = fields.assetType ? fields.assetType[0].toLowerCase() : '';
+  const collaboratorEmail = fields.collaboratorEmail
+    ? fields.collaboratorEmail[0]
+    : '';
+  const assetDetails = fields.assetDetails ? fields.assetDetails[0] : '';
+  const beneficiaryName = fields.beneficiaryName
+    ? fields.beneficiaryName[0]
+    : '';
+  const beneficiaryDateOfBirth = fields.beneficiaryDateOfBirth
+    ? fields.beneficiaryDateOfBirth[0]
+    : '';
+  const relationWithBeneficiary = fields.relationWithBeneficiary
+    ? fields.relationWithBeneficiary[0]
+    : '';
 
+  let assetDocumentUrl = '';
+  let beneficiaryDocumentUrl = '';
+
+  // Handle file uploads
   if (files.assetDocument && files.assetDocument[0]) {
     assetDocumentUrl = await saveAndGiveRefinedUrl(
       files.assetDocument[0],
@@ -49,12 +67,12 @@ export const createAssetController = myControllerHandler(async (req, res) => {
   let assetDateAfterSaved;
 
   if (assetType === 'real estate') {
-    const assetCountry = fields.assetCountry[0];
-    const assetState = fields.assetState[0];
-    const assetAddress = fields.assetAddress[0];
+    const assetCountry = fields.assetCountry ? fields.assetCountry[0] : '';
+    const assetState = fields.assetState ? fields.assetState[0] : '';
+    const assetAddress = fields.assetAddress ? fields.assetAddress[0] : '';
 
     assetDateAfterSaved = await assetModel.create({
-      ownerId: userData.id,
+      ownerId,
       assetName,
       type: assetType,
       assetDetails,
@@ -71,11 +89,11 @@ export const createAssetController = myControllerHandler(async (req, res) => {
     assetType === 'financial asset' ||
     assetType === 'debts & liabilities'
   ) {
-    const accountNumber = fields.accountNumber[0];
-    const accountName = fields.accountName[0];
+    const accountNumber = fields.accountNumber ? fields.accountNumber[0] : '';
+    const accountName = fields.accountName ? fields.accountName[0] : '';
 
     assetDateAfterSaved = await assetModel.create({
-      ownerId: userData.id,
+      ownerId,
       assetName,
       type: assetType,
       assetDetails,
@@ -93,7 +111,7 @@ export const createAssetController = myControllerHandler(async (req, res) => {
     assetType === 'memoirs/others'
   ) {
     assetDateAfterSaved = await assetModel.create({
-      ownerId: userData.id,
+      ownerId,
       assetName,
       type: assetType,
       assetDetails,
@@ -105,6 +123,7 @@ export const createAssetController = myControllerHandler(async (req, res) => {
     });
   }
 
+  // Handle collaborator email if provided
   if (collaboratorEmail) {
     const collaboratorData = await userModelOfMantled.findOne({
       email: collaboratorEmail,

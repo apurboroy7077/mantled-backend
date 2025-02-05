@@ -16,8 +16,9 @@ export const getSingleCollaboratorDataAndAssetsAssignedToHimController =
       'vaulttoken'
     );
     const { email } = vaultTokenData;
-    const { collaboratorId } = req.body;
+    const { collaboratorId } = req.query;
     const userData = await userModelOfMantled.findOne({ email });
+    console.log(collaboratorId);
     const collaboratorData = await userModelOfMantled.findOne({
       id: collaboratorId,
     });

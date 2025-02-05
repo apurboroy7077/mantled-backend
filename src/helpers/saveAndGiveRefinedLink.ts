@@ -1,7 +1,9 @@
 import refineUrlAr7 from './refineUrlAr7';
 import { saveFileToFolder } from './uploadFilesToFolder';
 
-export const saveAndGiveRefinedUrl = (myFile: any, directoryPath: string) => {
+type fType = (myFile: any, directoryPath: string) => Promise<string>;
+
+export const saveAndGiveRefinedUrl: fType = (myFile, directoryPath) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!myFile) {
